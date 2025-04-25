@@ -1,0 +1,91 @@
+volumes:
+  web_db_data:
+
+networks:
+  internal:
+    external: false
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+      target: server
+    environment:
+      DATABASE_USER: ${PG_USER:-web}
+      DATABASE_NAME: ${PG_DATABASE:-web}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - internal
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "--tries=1",
+          "--no-verbose",
+          "http://localhost:8080",
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+    depends_on:
+      api-migrations:
+        condition: service_completed_successfully
+    secrets:
+      - postgres_password
+  api-migrations:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+      target: migrations
+    environment:
+      DATABASE_USER: ${PG_USER:-web}
+      DATABASE_NAME: ${PG_DATABASE:-web}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    networks:
+      - internal
+    depends_on:
+      db:
+        condition: service_healthy
+    secrets:
+      - postgres_password
+    restart: on-failure
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${PG_DATABASE:-web}
+      POSTGRES_USER: ${PG_USER:-web}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-d",
+          "${PG_DATABASE:-web}",
+          "-U",
+          "${PG_USER:-web}",
+        ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    networks:
+      - internal
+    volumes:
+      - web_db_data:/var/lib/postgresql/data
+
+secrets:
+  postgres_password:
+    file: ./POSTGRES_PASSWORD

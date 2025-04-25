@@ -1,0 +1,38 @@
+# Ignore node modules from the host (we install deps in the image)
+**/node_modules
+
+# Log files
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Git files and metadata
+.git
+.gitignore
+
+# Environment
+**/.env*
+!**/.env.example
+POSTGRES_PASSWORD
+
+# OS-specific, IDE-specific, build & deployment files
+**/.DS_Store
+.vscode
+**/.turbo
+**/compose*
+**/Dockerfile*
+.dockerignore
+
+# Documentation and markdown files
+**/*.md
+
+# Temporary directories
+tmp
+
+# Build output directories
+**/dist
+**/.output
+out
+
+# Python
+**/.venv

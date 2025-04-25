@@ -1,0 +1,20 @@
+# dependencies
+node_modules
+
+# build output
+dist
+out
+.output
+.vinxi
+
+# temporary directories
+tmp
+
+# Environment
+POSTGRES_PASSWORD
+.env
+.env.*
+!.env.example
+
+# Python
+.venv
