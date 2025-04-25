@@ -18,3 +18,5 @@ POSTGRES_PASSWORD
 
 # Python
 .venv
+
+*.egg-info/
