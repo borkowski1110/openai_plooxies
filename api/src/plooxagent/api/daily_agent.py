@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 
+import aiohttp
 from pipecat.audio.vad.silero import SileroVADAnalyzer
 from pipecat.audio.vad.vad_analyzer import VADParams
 from pipecat.pipeline.pipeline import Pipeline
@@ -16,13 +17,18 @@ from pipecat.transports.services.daily import (
     DailyTransport,
 )
 
+from pipecat.transports.services.helpers.daily_rest import (
+    DailyRESTHelper,
+    DailyRoomObject,
+)
+
 logger = logging.getLogger(__name__)
 
 
 async def run_agent() -> None:
     logger.info("Starting agent")
 
-    transport = _setup_daily_transport(
+    transport = await _setup_daily_transport(
         room_url="https://tooploox-hackathon.daily.co/test_room"
     )
 
@@ -70,12 +76,21 @@ async def run_agent() -> None:
     await runner.run(task)
 
 
-def _setup_daily_transport(room_url):
+async def _setup_daily_transport(room_url: str) -> DailyTransport:
     DAILY_API_KEY = os.getenv("DAILY_API_KEY")
+
+    async with aiohttp.ClientSession() as session:
+        daily_rest_helper = DailyRESTHelper(
+            daily_api_key=DAILY_API_KEY,
+            daily_api_url=os.getenv("DAILY_API_URL", "https://api.daily.co/v1"),
+            aiohttp_session=session,
+        )
+        room_token = await daily_rest_helper.get_token(room_url)
+
 
     return DailyTransport(
         room_url,
-        DAILY_API_KEY,
+        room_token,
         "plooxagent / tooploox",
         DailyParams(
             audio_in_enabled=True,
