@@ -23,3 +23,10 @@ declare module "@tanstack/react-router" {
     router: ReturnType<typeof createRouter>;
   }
 }
+
+declare module "@tanstack/history" {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface HistoryState {
+    email?: string;
+  }
+}

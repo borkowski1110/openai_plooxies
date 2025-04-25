@@ -1,10 +1,10 @@
 import { QueryClient } from "@tanstack/react-query";
-import { HeadContent, Link, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import * as React from "react";
 import { Toaster } from "sonner";
-import { ThemeContext, useThemeProvider } from "app/utils/theme";
+import { ThemeContext, useThemeProvider } from "@/utils/theme";
 import { DefaultCatchBoundary } from "../components/DefaultCatchBoundary";
 import { NotFound } from "../components/NotFound";
 import stylesUrl from "../styles/app.css?url";
@@ -89,7 +89,6 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { user } = Route.useRouteContext();
   const theme = useThemeProvider();
 
   return (
@@ -99,28 +98,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <HeadContent />
         </head>
         <body>
-          <div className="flex gap-2 p-2 text-lg">
-            <Link
-              to="/"
-              activeProps={{
-                className: "font-bold",
-              }}
-              activeOptions={{ exact: true }}
-            >
-              Home
-            </Link>{" "}
-            <div className="ml-auto">
-              {user ? (
-                <>
-                  <span className="mr-2">{user.email}</span>
-                  <Link to="/logout">Logout</Link>
-                </>
-              ) : (
-                <Link to="/login">Login</Link>
-              )}
-            </div>
-          </div>
-          <hr />
           {children}
           <Scripts />
           <Toaster />

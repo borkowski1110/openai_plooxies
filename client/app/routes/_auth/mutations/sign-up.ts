@@ -1,6 +1,6 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getSupabaseServerClient } from "app/utils/supabase";
+import { getSupabaseServerClient } from "@/utils/supabase";
 
 export const signupFn = createServerFn({ method: "POST" })
   .validator((d: { email: string; password: string; redirectUrl?: string }) => d)
@@ -22,7 +22,3 @@ export const signupFn = createServerFn({ method: "POST" })
       href: data.redirectUrl ?? "/",
     });
   });
-
-export const signUpMutationOptions = {
-  mutationFn: signupFn,
-};
