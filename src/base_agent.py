@@ -4,7 +4,7 @@ from agents import Agent, Runner, tool
 # Step 1: Create Specialized Agents
 # --------------------------
 
-@tool
+@tool.function_tool
 def calculate_expression(expression: str) -> float:
     """Evaluate basic arithmetic expressions using Python's eval()"""
     try:
