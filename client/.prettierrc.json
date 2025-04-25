@@ -1,0 +1,9 @@
+{
+    "tabWidth": 2,
+    "useTabs": false,
+    "printWidth": 120,
+    "arrowParens": "always",
+    "plugins": ["prettier-plugin-tailwindcss"],
+    "tailwindFunctions": ["clsx", "cva", "twMerge", "cn"]
+  }
+  

@@ -1,4 +1,13 @@
 services:
+  web: !override
+    image: caddy:latest
+    command: >
+      caddy reverse-proxy
+      --from :3000
+      --to host.docker.internal:3000
+    restart: unless-stopped
+    networks:
+      - internal
   db:
     ports:
       - "5432:5432"
