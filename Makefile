@@ -13,11 +13,12 @@ clean:
 .PHONY: dev
 dev:
 	@echo "Starting services (Press Ctrl+C to stop all)..."
-	@(trap 'kill $${DOCKER_PID} $${NPM_PID} 2>/dev/null' EXIT INT TERM; \
+	@(trap './opik/opik.sh --stop & rm -r -f opik & kill $${DOCKER_PID} $${NPM_PID} 2>/dev/null' EXIT INT TERM; \
+	git clone https://github.com/comet-ml/opik.git & ./opik/opik.sh; \
 	docker compose -f compose.yaml -f compose.dev.yaml up --build & DOCKER_PID=$$!; \
 	(cd client && npm run dev) & NPM_PID=$$!; \
 	wait)
-
+	
 .PHONY: restart
 restart:
 	@docker compose restart

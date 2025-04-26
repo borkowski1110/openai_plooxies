@@ -40,7 +40,7 @@ services:
       DATABASE_PORT: 5432
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8010:8010"
     networks:
       - internal
     healthcheck:
@@ -51,7 +51,7 @@ services:
           "--spider",
           "--tries=1",
           "--no-verbose",
-          "http://localhost:8080",
+          "http://localhost:8010",
         ]
       interval: 1m
       timeout: 10s

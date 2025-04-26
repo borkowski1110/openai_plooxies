@@ -36,6 +36,6 @@ CMD ["alembic", "upgrade", "head"]
 
 FROM runner AS server
 
-EXPOSE 8080
+EXPOSE 8010
 
-CMD ["uvicorn", "plooxagent.api.server:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "plooxagent.api.server:app", "--host", "0.0.0.0", "--port", "8010"]
