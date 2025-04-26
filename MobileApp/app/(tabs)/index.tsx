@@ -1,63 +1,94 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  FlatList,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { useMemo } from "react";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { List, ListItem, Text } from "@ui-kitten/components";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+interface Message {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  route: "/chat";
+}
+
+const Date = ({ date }: { date: string }) => (
+  <View style={styles.dateContainer}>
+    <Text style={styles.dateText} appearance="hint" category="c1">
+      {date}
+    </Text>
+  </View>
+);
+
+const initialMessages: Message[] = [
+  {
+    id: "1",
+    title: "Chat 1",
+    description: "Basic chat interface",
+    date: "1:30 PM",
+    route: "/chat",
+  },
+  {
+    id: "2",
+    title: "Chat 2",
+    description: "Basic chat interface",
+    date: "2:30 PM",
+    route: "/chat",
+  },
+];
 
 export default function HomeScreen() {
+  const router = useRouter();
+
+  const renderItem = useMemo(() => {
+    return ({ item }: { item: Message }) => (
+      <ListItem
+        onPress={() => router.push(item.route)}
+        title={item.title}
+        description={item.description}
+        // accessoryLeft={renderProfileAvatar}
+        accessoryRight={<Date date={item.date} />}
+      />
+    );
+  }, []);
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require("@/assets/images/partial-react-logo.png")}
           style={styles.reactLogo}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+      }
+    >
+      <List
+        style={styles.list}
+        data={initialMessages}
+        renderItem={renderItem}
+      />
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  list: {
+    flex: 1,
+  },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   stepContainer: {
@@ -69,6 +100,45 @@ const styles = StyleSheet.create({
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
+  },
+  listContainer: {
+    paddingVertical: 16,
+  },
+  messageItem: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    marginBottom: 12,
+    padding: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  messageContent: {
+    gap: 4,
+  },
+  messageTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  messageDescription: {
+    fontSize: 14,
+    color: "#666",
+  },
+  dateContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dateText: {
+    textAlign: "right",
+    minWidth: 64,
   },
 });
