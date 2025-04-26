@@ -60,21 +60,17 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
+    <List
+      style={styles.list}
+      data={initialMessages}
+      renderItem={renderItem}
+      ListHeaderComponent={
         <Image
           source={require("@/assets/images/header-calls.jpg")}
           style={styles.reactLogo}
         />
       }
-    >
-      <List
-        style={styles.list}
-        data={initialMessages}
-        renderItem={renderItem}
-      />
-    </ParallaxScrollView>
+    />
   );
 }
 

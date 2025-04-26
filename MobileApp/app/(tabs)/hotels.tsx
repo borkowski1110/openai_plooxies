@@ -15,6 +15,12 @@ const AvatarComponent = ({ item }: { item: Hotel }) => {
   return item.avatar ? <Avatar source={{ uri: item.avatar }} /> : null;
 };
 
+const isArrayOfStrings = (value: any): value is string[] => {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "string")
+  );
+};
+
 export default function HotelsScreen() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
@@ -27,7 +33,16 @@ export default function HotelsScreen() {
   const renderItem = useMemo(() => {
     return ({ item }: { item: Hotel }) => (
       <ListItem
-        // onPress={() => router.push(item.route)}
+        onPress={() => {
+          router.push({
+            pathname: "/hotel",
+            params: {
+              name: item.name,
+              description: item.description,
+              gallery: isArrayOfStrings(item.gallery) ? item.gallery : [],
+            },
+          });
+        }}
         title={item.name}
         description={item.description}
         accessoryLeft={<AvatarComponent item={item} />}
@@ -36,9 +51,10 @@ export default function HotelsScreen() {
   }, []);
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={
+    <List
+      data={hotels}
+      renderItem={renderItem}
+      ListHeaderComponent={
         <Image
           source={require("@/assets/images/header-hotels.jpg")}
           style={{
@@ -48,9 +64,7 @@ export default function HotelsScreen() {
           }}
         />
       }
-    >
-      <List data={hotels} renderItem={renderItem} />
-    </ParallaxScrollView>
+    />
   );
 }
 
