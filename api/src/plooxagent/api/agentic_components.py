@@ -3,10 +3,9 @@ from agents.extensions.handoff_prompt import prompt_with_handoff_instructions
 from datetime import date
 from openai import OpenAI
 
-from .custom_tools import check_vacancy, book_a_room
-from .utils import vs_setup 
+from plooxagent.api.custom_tools import check_vacancy, book_a_room
+from plooxagent.api.utils import vs_setup 
 
-# set_default_openai_key("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")
 
 HOTEL_NAME = "Millman's Mansion"
 
