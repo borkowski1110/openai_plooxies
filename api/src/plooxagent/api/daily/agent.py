@@ -21,12 +21,20 @@ class DailyAgent:
     room_uri: str
 
     _ready_event: asyncio.Event = dataclasses.field(
-        init=False, default_factory=asyncio.Event
+        init=False,
+        default_factory=asyncio.Event,
+        repr=False,
     )
     _done_event: asyncio.Event = dataclasses.field(
-        init=False, default_factory=asyncio.Event
+        init=False,
+        default_factory=asyncio.Event,
+        repr=False,
     )
-    _task: asyncio.Task | None = dataclasses.field(init=False, default=None)
+    _task: asyncio.Task | None = dataclasses.field(
+        init=False,
+        default=None,
+        repr=False,
+    )
 
     async def run(self) -> None:
         self._task = asyncio.create_task(self._run())
@@ -42,6 +50,7 @@ class DailyAgent:
             microphone, speaker = self._create_devices()
             Daily.select_speaker_device(speaker.name)
             await self._join_room(microphone, client)
+            logger.info("%s: joined the room", self)
             await self._run_pipeline(microphone, speaker)
         finally:
             self._done_event.set()
@@ -85,6 +94,7 @@ class DailyAgent:
         microphone: VirtualMicrophoneDevice,
         speaker: VirtualSpeakerDevice,
     ) -> None:
+        logger.info("%s: running voice pipeline", self)
         pipeline = VoicePipeline(workflow=SingleAgentVoiceWorkflow(triage_agent))
         audio_input = StreamedAudioInput()
         result = await pipeline.run(audio_input)
@@ -98,6 +108,7 @@ class DailyAgent:
             ]
             await self._done_event.wait()
         finally:
+            logger.info("%s: stopping voice pipeline", self)
             for task in tasks:
                 task.cancel()
             await asyncio.gather(*tasks)
@@ -112,13 +123,11 @@ class DailyAgent:
         while True:
             data = speaker.read_frames(read_size)
             if len(data) > 0:
-                logger.info("mic: %s", len(data))
                 await audio_input.add_audio(np.frombuffer(data, dtype=np.int16))
             await asyncio.sleep(0.01)
 
     @staticmethod
     async def _handle_events(microphone: VirtualMicrophoneDevice, result) -> None:
         async for event in result.stream():
-            logger.info("evt: %s", event)
             if event.type == "voice_stream_event_audio":
                 microphone.write_frames(event.data.tobytes())
