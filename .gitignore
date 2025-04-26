@@ -9,6 +9,7 @@ out
 
 # temporary directories
 tmp
+.DS_Store
 
 # Environment
 POSTGRES_PASSWORD

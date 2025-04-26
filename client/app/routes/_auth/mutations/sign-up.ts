@@ -1,6 +1,6 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getSupabaseServerClient } from "@/utils/supabase";
+import { getSupabaseServerClient } from "@/utils/supabase/server";
 
 export const signupFn = createServerFn({ method: "POST" })
   .validator((d: { email: string; password: string; redirectUrl?: string }) => d)
