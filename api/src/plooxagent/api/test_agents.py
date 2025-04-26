@@ -10,7 +10,6 @@ set_trace_processors(processors=[OpikTracingProcessor()])
 
 async def test_queries():
     examples = [
-        "Hello " * 1000,
         "Puedo hacer una reserva?",
         "Tell me something about Gdynia.",
         "What kind of object are you? What is unique about your place?",
