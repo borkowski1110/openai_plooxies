@@ -1,0 +1,20 @@
+{
+  "room_description": {
+    "id": "vs_680c9d6f23c881918b9371cd9d0cdd9c",
+    "name": "room_description",
+    "created_at": 1745657199,
+    "file_count": 0,
+    "files": {
+      "knowledge_base/room_descriptions.pdf": "1ba0e950a9655067c305dfc2768bc825f00cb84c7e52a7f8d77ffbceabd20fbd"
+    }
+  },
+  "hotel_description": {
+    "id": "vs_680c9d71904481919797390666a1517b",
+    "name": "hotel_description",
+    "created_at": 1745657201,
+    "file_count": 0,
+    "files": {
+      "knowledge_base/hotel_description.pdf": "0a662f8c953cc5c780c8ddd77513b4391af802f73c413fa4ac323a33cbb5efbc"
+    }
+  }
+}
