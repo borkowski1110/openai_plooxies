@@ -48,7 +48,12 @@ function CallScreen() {
       const data = await fetchRoom();
 
       console.log(data);
-      await call.current?.join({ url: data.url, userName });
+      await call.current?.join({
+        url: data.url,
+        userName,
+        startVideoOff: true,
+        startAudioOff: false,
+      });
       setIsInCall(true);
       updateParticipants();
     };

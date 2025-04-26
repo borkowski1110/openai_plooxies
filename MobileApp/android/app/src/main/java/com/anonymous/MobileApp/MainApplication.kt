@@ -1,4 +1,4 @@
-package com.anonymous.MobileApp
+package com.tooploox.NightReceptionist
 
 import android.app.Application
 import android.content.res.Configuration
