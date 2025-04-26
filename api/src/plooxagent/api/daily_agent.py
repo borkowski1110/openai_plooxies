@@ -19,7 +19,6 @@ from pipecat.transports.services.daily import (
 
 from pipecat.transports.services.helpers.daily_rest import (
     DailyRESTHelper,
-    DailyRoomObject,
 )
 
 logger = logging.getLogger(__name__)
