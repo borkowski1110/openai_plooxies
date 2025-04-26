@@ -3,7 +3,6 @@ import React from "react";
 import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -31,10 +30,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Calls",
+          title: "Hotels",
           tabBarIcon: ({ color }) => (
             <Icon
-              name="phone-call-outline"
+              name="globe-2-outline"
               style={{
                 width: 24,
                 height: 24,
@@ -45,12 +44,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="hotels"
+        name="calls"
         options={{
-          title: "Hotels",
+          title: "Calls",
           tabBarIcon: ({ color }) => (
             <Icon
-              name="globe-2-outline"
+              name="phone-call-outline"
               style={{
                 width: 24,
                 height: 24,

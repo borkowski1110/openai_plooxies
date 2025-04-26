@@ -1,25 +1,39 @@
-import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  ToastAndroid,
+  Platform,
+} from "react-native";
 import Daily, {
-  DailyEvent,
   DailyParticipant,
   DailyEventObjectParticipant,
   DailyEventObjectParticipantLeft,
   DailyCall,
 } from "@daily-co/react-native-daily-js";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { CallParticipantTile } from "../components/CallParticipantTile";
 import { ThemedView } from "../components/ThemedView";
-import { ThemedText } from "../components/ThemedText";
-import { Icon } from "@ui-kitten/components";
-import { useRouter } from "expo-router";
+import { Icon, Text } from "@ui-kitten/components";
+import { useFocusEffect, useRouter } from "expo-router";
 
-const call: DailyCall = Daily.createCallObject();
+const apiUrl = "https://plooxies-hackathon-openai.loca.lt";
 
-const testURL = "https://tooploox-hackathon.daily.co/test_room";
-const userName = Platform.OS === "ios" ? "ios" : "android";
+type RoomResponse = {
+  url: string;
+};
+const fetchRoom = async (): Promise<RoomResponse> => {
+  const response = await fetch(`${apiUrl}/call`, { method: "POST" });
+  const data = (await response.json()) as RoomResponse;
+  return data;
+};
+
+const userName = "User";
 
 function CallScreen() {
   const router = useRouter();
+  const call = useRef<DailyCall | undefined>();
   const [isInCall, setIsInCall] = useState(false);
   const [participants, setParticipants] = useState<
     Record<string, DailyParticipant>
@@ -27,21 +41,38 @@ function CallScreen() {
   const [isAudioOn, setIsAudioOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(false);
 
+  const onViewFocus = useCallback(() => {
+    console.log("Navigated to /call route!");
+    call.current = Daily.createCallObject();
+    const joinCall = async () => {
+      const data = await fetchRoom();
+
+      console.log(data);
+      await call.current?.join({ url: data.url, userName });
+      setIsInCall(true);
+      updateParticipants();
+    };
+    joinCall()
+      .then(() => {
+        console.log("Joined call");
+      })
+      .catch((err) => {
+        console.error(err);
+        if (Platform.OS === "android") {
+          ToastAndroid.show("Failed to join call", ToastAndroid.LONG);
+        }
+        router.back();
+      });
+  }, []);
+
+  useFocusEffect(onViewFocus);
+
   const updateParticipants = useCallback(() => {
-    setParticipants(call.participants());
+    setParticipants(call.current?.participants() ?? {});
   }, []);
 
   const handleParticipantJoined = useCallback(
     (event: DailyEventObjectParticipant) => {
-      console.log("Participant joined:", event);
-      updateParticipants();
-    },
-    [updateParticipants]
-  );
-
-  const handleParticipantUpdated = useCallback(
-    (event: DailyEventObjectParticipant) => {
-      console.log("Participant updated:", event);
       updateParticipants();
     },
     [updateParticipants]
@@ -49,44 +80,27 @@ function CallScreen() {
 
   const handleParticipantLeft = useCallback(
     (event: DailyEventObjectParticipantLeft) => {
-      console.log("Participant left:", event);
       updateParticipants();
     },
     [updateParticipants]
   );
 
   useEffect(() => {
-    // Set up event handlers
-    call
-      .on("participant-joined", handleParticipantJoined)
-      .on("participant-updated", handleParticipantUpdated)
+    call.current
+      ?.on("participant-joined", handleParticipantJoined)
       .on("participant-left", handleParticipantLeft);
 
-    // Clean up the call object when component unmounts
     return () => {
       console.log("destroying call");
-      call.destroy();
+      call.current?.destroy().then(() => {
+        call.current = undefined;
+      });
     };
-  }, [
-    handleParticipantJoined,
-    handleParticipantUpdated,
-    handleParticipantLeft,
-  ]);
-
-  const handleJoinCall = async () => {
-    try {
-      console.log("Joining call...");
-      await call.join({ url: testURL, userName });
-      setIsInCall(true);
-      updateParticipants();
-    } catch (error) {
-      console.error("Failed to join call:", error);
-    }
-  };
+  }, [handleParticipantJoined, handleParticipantLeft]);
 
   const handleLeaveCall = async () => {
     try {
-      await call.leave();
+      await call.current?.leave();
       setIsInCall(false);
       setParticipants({});
       router.back();
@@ -95,35 +109,37 @@ function CallScreen() {
     }
   };
 
-  const toggleAudio = async () => {
+  const toggleAudio = useCallback(async () => {
     try {
-      await call.setLocalAudio(!isAudioOn);
-      setIsAudioOn(!isAudioOn);
+      await call.current?.setLocalAudio(!isAudioOn);
+      setIsAudioOn((prev) => !prev);
     } catch (error) {
       console.error("Failed to toggle audio:", error);
     }
-  };
+  }, [setIsAudioOn]);
 
-  const toggleVideo = async () => {
+  const toggleVideo = useCallback(async () => {
     try {
-      await call.setLocalVideo(!isVideoOn);
-      setIsVideoOn(!isVideoOn);
+      await call.current?.setLocalVideo(!isVideoOn);
+      setIsVideoOn((prev) => !prev);
     } catch (error) {
       console.error("Failed to toggle video:", error);
     }
-  };
+  }, [setIsVideoOn]);
+
+  const participantArray = useMemo(
+    () => Object.values(participants),
+    [participants]
+  );
 
   if (!isInCall) {
     return (
       <ThemedView style={styles.container}>
-        <TouchableOpacity style={styles.joinButton} onPress={handleJoinCall}>
-          <ThemedText style={styles.joinButtonText}>Join Call</ThemedText>
-        </TouchableOpacity>
+        <Text style={styles.joinText}>Joining call...</Text>
+        <ActivityIndicator size="large" color="#fff" />
       </ThemedView>
     );
   }
-
-  const participantArray = Object.values(participants);
 
   return (
     <ThemedView style={styles.container}>
@@ -223,10 +239,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#007AFF",
     borderRadius: 12,
   },
-  joinButtonText: {
+  joinText: {
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "600",
+    marginBottom: 16,
   },
 });
 
