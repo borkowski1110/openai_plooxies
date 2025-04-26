@@ -1,6 +1,6 @@
 # %%
 from agents import Runner, trace
-from src.agentic_components import triage_agent
+from plooxagent.api.agentic_components import triage_agent
 import asyncio
 
 from agents import set_trace_processors

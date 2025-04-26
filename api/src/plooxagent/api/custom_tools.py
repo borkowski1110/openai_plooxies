@@ -3,7 +3,7 @@ from datetime import date, datetime
 from typing import Optional, Literal
 from pathlib import Path
 import os
-from src.database.calendar import HotelCalendar
+from plooxagent.api.database.calendar import HotelCalendar
 
 
 def get_calendar(csv_path: Optional[str] = "data/hotel_calendar_data.csv"):

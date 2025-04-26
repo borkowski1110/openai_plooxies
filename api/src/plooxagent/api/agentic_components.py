@@ -9,8 +9,8 @@ from typing import Dict, Any, List, Tuple, Optional
 from pydantic import BaseModel
 import re
 
-from src.custom_tools import check_vacancy, book_a_room
-from src.utils import vs_setup, validate_date_format, validate_date_range, validate_number_of_persons, validate_room_type
+from plooxagent.api.custom_tools import check_vacancy, book_a_room
+from plooxagent.api.utils import vs_setup, validate_date_format, validate_date_range, validate_number_of_persons, validate_room_type
 
 
 HOTEL_NAME = "Millman's Mansion"
