@@ -14,7 +14,7 @@ class AppCtx:
 
 
 @contextlib.asynccontextmanager
-async def lifespan(app: FastAPI) -> t.AsyncGenerator[None]:
+async def lifespan(app: FastAPI) -> t.AsyncGenerator[None, None]:
     async with contextlib.AsyncExitStack() as cm:
         app.state.ctx = AppCtx(
             cm=cm,
