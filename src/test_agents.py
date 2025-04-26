@@ -3,8 +3,15 @@ from agents import Runner, trace
 from src.agentic_components import triage_agent
 import asyncio
 
+from agents import set_trace_processors
+from opik.integrations.openai.agents import OpikTracingProcessor
+set_trace_processors(processors=[OpikTracingProcessor()])
+
+
 async def test_queries():
     examples = [
+        "Hello " * 1000,
+        "Puedo hacer una reserva?",
         "Tell me something about Gdynia.",
         "What kind of object are you? What is unique about your place?",
         "I am looking for an elegant and rather large suite, which room would you refer to me?",
