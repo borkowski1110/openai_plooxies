@@ -5,8 +5,10 @@ from pathlib import Path
 import os
 from plooxagent.api.database.calendar import HotelCalendar
 
+CALENDAR_PATH = "data/hotel_calendar_data.csv"
 
-def get_calendar(csv_path: Optional[str] = "data/hotel_calendar_data.csv"):
+
+def get_calendar(csv_path: Optional[str] = CALENDAR_PATH):
     """
     Get hotel calendar data, either by loading from CSV or generating mock data.
     
@@ -35,7 +37,7 @@ def get_calendar(csv_path: Optional[str] = "data/hotel_calendar_data.csv"):
 @function_tool
 def check_vacancy(start_date: str, end_date: str, number_of_persons: int) -> str:
     # Get calendar data
-    calendar_data = get_calendar()
+    calendar_data = get_calendar(CALENDAR_PATH)
     
     # Convert string dates to date objects
     try:
@@ -110,7 +112,9 @@ def check_vacancy(start_date: str, end_date: str, number_of_persons: int) -> str
 
 
 @function_tool
-def book_a_room(start_date: str, end_date: str, room_type: Literal["budget", "superior", "executive"]) -> str:
+def book_a_room(
+    start_date: str, end_date: str, room_type: Literal["budget", "superior", "executive"]
+) -> str:
     """
     Book a room of the selected category for all dates from start_date to end_date.
     
@@ -123,7 +127,7 @@ def book_a_room(start_date: str, end_date: str, room_type: Literal["budget", "su
         str: Booking confirmation or error message
     """
     # Get calendar data
-    calendar_data = get_calendar()
+    calendar_data = get_calendar(CALENDAR_PATH)
     
     # Convert string dates to date objects
     try:
@@ -165,7 +169,7 @@ def book_a_room(start_date: str, end_date: str, room_type: Literal["budget", "su
         return f"Booking failed for the following dates: {failed_dates_str}. No rooms were booked."
     
     # Save updated calendar data
-    HotelCalendar.write_csv(calendar_data)
+    HotelCalendar.write_csv(calendar_data, csv_path=CALENDAR_PATH)
     
     # Return success message
     return f"Successfully booked a {room_type} room from {start_date} to {end_date}."
