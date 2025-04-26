@@ -20,7 +20,8 @@ vs_ids = vs_setup(
     paths=["knowledge_base/room_descriptions.pdf", "knowledge_base/hotel_description.pdf"]
 )
 
-# guardrail_agent = Agent( 
+
+# ctx_guardrail_agent = Agent( 
 #     name="Guardrail check",
 #     instructions="Check if the user is asking you to do their math homework.",
 #     output_type=MathHomeworkOutput,
@@ -41,17 +42,18 @@ vs_ids = vs_setup(
 # # --- Guardrail Functions ---
 # # Message length
 
-# @input_guardrail
-# def check_message_length(ctx: RunContextWrapper[None], agent: Agent, input: str | list[TResponseInputItem], max_length: int = 300):
-#     tripwire_triggered = False
-#     info = ""
-#     if len(ctx.context) > max_length:
-#         tripwire_triggered = True
-#         info = f"Max message length of {max_length} exceeded!"
-#     return GuardrailFunctionOutput(
-#         output_info=info, 
-#         tripwire_triggered=tripwire_triggered,
-#     )
+@input_guardrail
+def check_message_length(ctx: RunContextWrapper[None], agent: Agent, input: str | list[TResponseInputItem], max_length: int = 300):
+    tripwire_triggered = False
+    info = ""
+    print(input)
+    if len(input) > max_length:
+        tripwire_triggered = True
+        info = f"Max message length of {max_length} exceeded!"
+    return GuardrailFunctionOutput(
+        output_info=info, 
+        tripwire_triggered=tripwire_triggered,
+    )
 
 # TODO: Change for agent-controlled
 def filter_inappropriate_content(text: str) -> Tuple[bool, Optional[str]]:
@@ -452,5 +454,5 @@ General questions answer yourself.
 """),
     tools=[triage_guardrail], #  translate_text_with_guardrails],
     handoffs=[room_recommending_agent, storyteller_agent, vacancy_checking_agent, booking_agent],
-    # input_guardrails=[check_message_length]
+    input_guardrails=[check_message_length]
 )
