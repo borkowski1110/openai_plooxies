@@ -20,3 +20,4 @@ POSTGRES_PASSWORD
 .venv
 
 *.egg-info/
+__pycache__
