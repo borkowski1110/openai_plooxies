@@ -1,0 +1,14 @@
+{
+  "room_description": {
+    "id": "vs_680c123b5bf08191ba0e82412bbff38e",
+    "name": "room_description",
+    "created_at": 1745621563,
+    "file_count": 0
+  },
+  "hotel_description": {
+    "id": "vs_680c123d54b08191969a132320afca88",
+    "name": "hotel_description",
+    "created_at": 1745621565,
+    "file_count": 0
+  }
+}
