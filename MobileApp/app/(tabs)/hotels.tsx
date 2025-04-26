@@ -39,7 +39,9 @@ export default function HotelsScreen() {
             params: {
               name: item.name,
               description: item.description,
+              avatar: item.avatar ?? "",
               gallery: isArrayOfStrings(item.gallery) ? item.gallery : [],
+              rating: item.rating ? item.rating.toString() : "0",
             },
           });
         }}
