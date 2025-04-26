@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'MobileApp'
+rootProject.name = 'Night Receptionist'
 
 dependencyResolutionManagement {
   versionCatalogs {

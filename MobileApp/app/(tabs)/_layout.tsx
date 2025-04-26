@@ -1,12 +1,12 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs } from "expo-router";
+import React from "react";
+import { Platform } from "react-native";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { HapticTab } from "@/components/HapticTab";
+import TabBarBackground from "@/components/ui/TabBarBackground";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Icon } from "@ui-kitten/components";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,37 +14,49 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        headerShown: true,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+            position: "absolute",
           },
           default: {},
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Hotels",
+          tabBarIcon: ({ color }) => (
+            <Icon
+              name="globe-2-outline"
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: color,
+              }}
+            />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="calls"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-        <Tabs.Screen
-        name="call"
-        options={{
-          title: 'Call',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="phone.fill" color={color} />,
+          title: "Calls",
+          tabBarIcon: ({ color }) => (
+            <Icon
+              name="phone-call-outline"
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: color,
+              }}
+            />
+          ),
         }}
       />
     </Tabs>

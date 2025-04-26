@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MobileApp",
-    "slug": "MobileApp",
+    "name": "Night Receptionist",
+    "slug": "NightReceptionist",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,7 @@
         ]
       },
       "bitcode": false,
-      "bundleIdentifier": "com.anonymous.MobileApp"
+      "bundleIdentifier": "com.tooploox.NightReceptionist"
     },
     "android": {
       "adaptiveIcon": {
@@ -36,22 +36,9 @@
         "android.permission.FOREGROUND_SERVICE_CAMERA",
         "android.permission.FOREGROUND_SERVICE_MICROPHONE",
         "android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION",
-        "android.permission.POST_NOTIFICATIONS",
-        "android.permission.ACCESS_NETWORK_STATE",
-        "android.permission.CAMERA",
-        "android.permission.INTERNET",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.RECORD_AUDIO",
-        "android.permission.SYSTEM_ALERT_WINDOW",
-        "android.permission.WAKE_LOCK",
-        "android.permission.BLUETOOTH",
-        "android.permission.FOREGROUND_SERVICE",
-        "android.permission.FOREGROUND_SERVICE_CAMERA",
-        "android.permission.FOREGROUND_SERVICE_MICROPHONE",
-        "android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION",
         "android.permission.POST_NOTIFICATIONS"
       ],
-      "package": "com.anonymous.MobileApp"
+      "package": "com.tooploox.NightReceptionist"
     },
     "web": {
       "bundler": "metro",
@@ -61,8 +48,6 @@
     "plugins": [
       "@config-plugins/react-native-webrtc",
       "@daily-co/config-plugin-rn-daily-js",
-    
-      
       "expo-router",
       [
         "expo-splash-screen",
@@ -93,6 +78,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "312dd6b9-182f-4cda-a5ed-2d761dad2766"
+      }
     }
   }
 }

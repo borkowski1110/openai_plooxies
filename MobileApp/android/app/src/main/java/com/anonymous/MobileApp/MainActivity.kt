@@ -1,4 +1,4 @@
-package com.anonymous.MobileApp
+package com.tooploox.NightReceptionist
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

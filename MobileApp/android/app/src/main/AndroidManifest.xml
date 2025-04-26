@@ -40,7 +40,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.anonymous.MobileApp"/>
+        <data android:scheme="com.tooploox.NightReceptionist"/>
         <data android:scheme="exp+mobileapp"/>
       </intent-filter>
     </activity>

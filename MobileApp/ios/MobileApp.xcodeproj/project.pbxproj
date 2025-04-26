@@ -302,7 +302,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.MobileApp";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tooploox.NightReceptionist";
 				PRODUCT_NAME = "MobileApp";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -329,7 +329,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.MobileApp";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tooploox.NightReceptionist";
 				PRODUCT_NAME = "MobileApp";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
