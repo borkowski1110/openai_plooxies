@@ -20,7 +20,7 @@ type UnPromiReturnType<T> = T extends () => Promise<infer U> ? U : T;
 type NotNull<T> = T extends null ? never : T;
 
 export const getHotels = async () => {
-  const { data, error } = await supabase.from("hotes").select("*");
+  const { data, error } = await supabase.from("hotels").select("*");
   if (error) {
     console.error(error);
   }
