@@ -19,7 +19,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY . /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+    uv sync --frozen --no-dev \
+    # Might move this to a build step
+    && cd /app && uv pip install -e .
 
 FROM base AS runner
 
@@ -36,4 +38,4 @@ FROM runner AS server
 
 EXPOSE 8080
 
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "plooxagent.api.server:app", "--host", "0.0.0.0", "--port", "8080"]
