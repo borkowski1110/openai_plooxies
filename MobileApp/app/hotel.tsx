@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Image as RNImage } from "react-native";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import {
   Avatar,
   Button,
@@ -35,6 +35,8 @@ export default function HotelScreen() {
   const posts = 116;
 
   const parsedGallery = useMemo(() => gallery.split(","), [gallery]);
+
+  const router = useRouter();
 
   return (
     <Layout style={{ flex: 1, backgroundColor: "#F7F9FC" }}>
@@ -86,7 +88,9 @@ export default function HotelScreen() {
             style={{ flex: 1, marginRight: 8 }}
             status="primary"
             accessoryLeft={<Icon name="phone" />}
-            onPress={() => {}}
+            onPress={() => {
+              router.push("/call");
+            }}
           >
             CALL
           </Button>
