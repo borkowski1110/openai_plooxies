@@ -1,15 +1,9 @@
-import { StyleSheet, Image, Platform } from "react-native";
-
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { StyleSheet, Image, ActivityIndicator, View } from "react-native";
 import { useEffect, useMemo, useState } from "react";
 import { getHotels, Hotel } from "@/data/database";
 import { Avatar, List, ListItem } from "@ui-kitten/components";
 import { router } from "expo-router";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
 
 const AvatarComponent = ({ item }: { item: Hotel }) => {
   return item.avatar ? <Avatar source={{ uri: item.avatar }} /> : null;
@@ -23,11 +17,17 @@ const isArrayOfStrings = (value: any): value is string[] => {
 
 export default function HotelsScreen() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const onRefresh = () => {
+    setLoading(true);
     getHotels().then((hotels) => {
       if (hotels) setHotels(hotels);
+      setLoading(false);
     });
+  };
+  useEffect(() => {
+    onRefresh();
   }, []);
 
   const renderItem = useMemo(() => {
@@ -50,8 +50,28 @@ export default function HotelsScreen() {
     );
   }, []);
 
-  return (
+  return loading ? (
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
+      headerImage={
+        <Image
+          source={require("@/assets/images/header-hotels.jpg")}
+          style={{
+            width: "100%",
+            height: 300,
+            transform: [{ translateY: -20 }],
+          }}
+        />
+      }
+    >
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#888" />
+      </View>
+    </ParallaxScrollView>
+  ) : (
     <List
+      refreshing={loading}
+      onRefresh={onRefresh}
       data={hotels}
       renderItem={renderItem}
       ListHeaderComponent={

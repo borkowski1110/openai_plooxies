@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Platform, Image } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Hotel } from "@/data/database";
 
 export default function HotelScreen() {
@@ -8,13 +8,18 @@ export default function HotelScreen() {
     Pick<Hotel, "name" | "description"> & { gallery: string }
   >();
 
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (name) {
+      navigation.setOptions({ title: name });
+    }
+  }, [name, navigation]);
+
   const parsedGallery = gallery.split(",");
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>{name}</Text>
-      </View>
       <View style={styles.content}>
         <Text style={styles.placeholder}>{description}</Text>
       </View>
