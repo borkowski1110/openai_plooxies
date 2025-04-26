@@ -96,9 +96,10 @@ async def _setup_daily_transport(room_url: str) -> DailyTransport:
             audio_in_enabled=True,
             audio_in_sample_rate=16000,
             audio_out_enabled=True,
-            audio_out_sample_rate=16000,
+            audio_out_sample_rate=24000,
             camera_out_enabled=False,
             transcription_enabled=False,
+            vad_enabled=True,
             vad_analyzer=SileroVADAnalyzer(params=VADParams(stop_secs=0.8)),
             vad_audio_passthrough=True,
         ),
@@ -113,8 +114,7 @@ def _setup_services() -> tuple[
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     stt = OpenAISTTService(
         api_key=OPENAI_API_KEY,
-        model="gpt-4o-transcribe",
-        prompt="Expect words related to bookings, hotels, travel, and hospitality.",
+        # prompt="Expect words related to bookings, hotels, travel, and hospitality.",
     )
     tts = OpenAITTSService(api_key=OPENAI_API_KEY, voice="ballad")
     llm = OpenAILLMService(api_key=OPENAI_API_KEY, model="gpt-4o")
