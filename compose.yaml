@@ -38,6 +38,7 @@ services:
       DATABASE_NAME: ${PG_DATABASE:-web}
       DATABASE_HOST: db
       DATABASE_PORT: 5432
+    env_file: api/.env
     restart: unless-stopped
     ports:
       - "8080:8080"

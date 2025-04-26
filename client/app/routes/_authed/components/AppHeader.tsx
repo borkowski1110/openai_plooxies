@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
 export const AppHeader = ({
@@ -12,6 +13,7 @@ export const AppHeader = ({
 }) => (
   <header className="bg-background z-header sticky top-0 grid h-14 shrink-0 grid-cols-[1fr_minmax(auto,var(--container-main))_1fr] items-center gap-2 border-b px-4">
     <div className="flex items-center gap-2">
+      <SidebarTrigger />
       <div className="@container mr-2 flex-grow">
         <Separator
           orientation="vertical"

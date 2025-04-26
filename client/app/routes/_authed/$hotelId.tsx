@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Breadcrumb,
@@ -8,19 +7,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { AppHeader } from "./components/AppHeader";
-import { HotelsList } from "./components/HotelsList";
-import { PageHeader, PageHeaderInfo, PageHeaderInfoDescription, PageHeaderInfoTitle } from "./components/PageHeader";
-import { hotelsQueryOptions } from "./queries/hotels";
+import { PageHeader, PageHeaderInfo, PageHeaderInfoTitle, PageHeaderInfoDescription } from "./components/PageHeader";
 
-export const Route = createFileRoute("/_authed/")({
+export const Route = createFileRoute("/_authed/$hotelId")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data: hotels } = useQuery(hotelsQueryOptions);
+  const { hotelId } = Route.useParams();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col">
       <AppHeader
         breadcrumbs={
           <Breadcrumb>
@@ -39,13 +36,11 @@ function RouteComponent() {
       <PageHeader>
         <PageHeaderInfo>
           <PageHeaderInfoTitle>Hotels</PageHeaderInfoTitle>
-          <PageHeaderInfoDescription>Manage your properties</PageHeaderInfoDescription>
+          <PageHeaderInfoDescription>Your hotels dashboard</PageHeaderInfoDescription>
         </PageHeaderInfo>
       </PageHeader>
-      <div className="flex flex-1 flex-col items-center p-6 pb-12">
-        <div className="w-full max-w-[1400px]">
-          <HotelsList hotels={hotels ?? []} />
-        </div>
+      <div className="flex flex-col items-center p-6">
+        <div className="max-w-main flex w-full flex-col">{hotelId}</div>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { DefaultCatchBoundary } from "../components/DefaultCatchBoundary";
 import { NotFound } from "../components/NotFound";
 import stylesUrl from "../styles/app.css?url";
 import { seo } from "../utils/seo";
-import { getSupabaseServerClient } from "../utils/supabase";
+import { getSupabaseServerClient } from "../utils/supabase/server";
 
 const fetchUser = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = getSupabaseServerClient();
