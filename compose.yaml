@@ -6,10 +6,32 @@ networks:
     external: false
 
 services:
-  api:
+  web:
     build:
       context: .
-      dockerfile: api/Dockerfile
+      dockerfile: client/Dockerfile
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+    networks:
+      - internal
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "--tries=1",
+          "--no-verbose",
+          "http://localhost:3000",
+        ]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
       target: server
     environment:
       DATABASE_USER: ${PG_USER:-web}
@@ -41,8 +63,8 @@ services:
       - postgres_password
   api-migrations:
     build:
-      context: .
-      dockerfile: api/Dockerfile
+      context: api
+      dockerfile: Dockerfile
       target: migrations
     environment:
       DATABASE_USER: ${PG_USER:-web}
@@ -75,8 +97,8 @@ services:
           "-U",
           "${PG_USER:-web}",
         ]
-      interval: 30s
-      timeout: 30s
+      interval: 5s
+      timeout: 5s
       retries: 3
     restart: on-failure
     stdin_open: true

@@ -12,7 +12,11 @@ clean:
 
 .PHONY: dev
 dev:
-	@docker compose -f compose.yaml -f compose.dev.yaml up --build
+	@echo "Starting services (Press Ctrl+C to stop all)..."
+	@(trap 'kill $${DOCKER_PID} $${NPM_PID} 2>/dev/null' EXIT INT TERM; \
+	docker compose -f compose.yaml -f compose.dev.yaml up --build & DOCKER_PID=$$!; \
+	(cd client && npm run dev) & NPM_PID=$$!; \
+	wait)
 
 .PHONY: restart
 restart:
